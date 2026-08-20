@@ -1,0 +1,30 @@
+{
+  "name": "wxt-solid-starter",
+  "description": "manifest.json description",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:all": "pnpm run zip && pnpm run zip:firefox",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare",
+    "resize": "pnpm dlx @kunver/resize",
+    "manager": "node manager.cjs pnpm"
+  },
+  "dependencies": {
+    "solid-js": "^1.9.11"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.2.1",
+    "@tailwindcss/vite": "^4.2.1",
+    "@wxt-dev/module-solid": "^1.1.4",
+    "typescript": "^5.9.3",
+    "wxt": "^latest"
+  }
+}
