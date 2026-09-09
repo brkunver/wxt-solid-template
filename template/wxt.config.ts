@@ -3,9 +3,8 @@ import tailwindcss from "@tailwindcss/vite"
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
+  manifestVersion: 3,
   manifest: {
-    name: "wxt-solid-starter",
-    description: "manifest.json description",
     browser_specific_settings: {
       gecko: {
         data_collection_permissions: {
@@ -17,6 +16,9 @@ export default defineConfig({
   modules: ["@wxt-dev/module-solid"],
   hooks: {
     "build:manifestGenerated": (wxt, manifest) => {
+      if (manifest.action) {
+        manifest.action.default_title = manifest.name
+      }
       if (wxt.config.mode === "development") {
         const originalName = manifest.name
         manifest.name = "(DEV) " + originalName

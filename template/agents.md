@@ -1,76 +1,39 @@
-- This is a Web Extension Project
-- Goal : <goal>
+# Project guidance
 
-- This project uses wxt framework for development. wxt is a extension development framework.
-- website to framework is : https://wxt.dev/
-- you can find docs on these websites :
+- This is a WXT browser extension using SolidJS, TypeScript, and Tailwind CSS v4.
+- Target Manifest V3 for Chrome and Firefox.
+- Source entrypoints live in `entrypoints/`, not `src/entrypoints/`.
+- The content UI entrypoint is `entrypoints/content/index.tsx`. Initer may replace it with `entrypoints/content.ts` when content UI is disabled.
+- Use WXT's `browser` global instead of `chrome`.
+- Follow `.prettierrc.json`; formatting is available through the editor extension.
 
-1. https://wxt.dev//knowledge/docs.txt
-2. https://wxt.dev//knowledge/api-reference.txt
+## Commands and configuration
 
-- use browser super global whenever you want to use chrome global. wxt uses browser global for development
-  for example:
-  browser.runtime.getURL() instead of chrome.runtime.getURL()
+- Initer supports Bun, npm, and pnpm. Use the package manager selected for this project, as reflected in the `manager` script and generated lockfile. The template defaults to Bun.
+- Use the existing scripts in `package.json` for development, type checking, builds, and ZIP archives.
+- WXT generates the manifest from `wxt.config.ts` and entrypoint metadata. Do not edit `.output/` or `.wxt/` files.
+- Extension name and description come from `package.json`. Initer sets the package name; update the description for the actual project.
+- Browser auto-launch is disabled in `wxt.config.ts`; load the generated extension manually.
+- Keep the content script's `<all_urls>` match until the project's requirements specify its target sites.
+- Configure a project-specific Firefox extension ID in `manifest.browser_specific_settings.gecko.id` before distribution.
+- Keep Firefox's data collection declaration consistent with the project's actual behavior.
 
-## Manifest :
+## Storage and localization
 
-In WXT, there is no manifest.json file in your source code. Instead, WXT generates the manifest from multiple sources:
+- If storage is needed, use WXT Storage from `#imports` and check for existing definitions in `utils/storage.ts` first.
+- Use the `local:` prefix for local storage and ensure the manifest includes the `storage` permission.
+- If localization is needed, use `@wxt-dev/i18n` with `#i18n`. Initer can install and configure the module and create `locales/en.yml`.
+- Do not assume storage or i18n is enabled; both are optional in Initer.
 
-Global options defined in wxt.config.ts file
-Entrypoint-specific options defined in your entrypoints
-WXT Modules added to your project can modify your manifest
-Hooks defined in your project can modify your manifest
-Your extension's manifest.json will be output to .output/{target}/manifest.json when running wxt build.
+## Project manager
 
-- this extension should work <url>
-- this project uses SolidJS for frontend.
-- this extension aims manifest v3
-- this project uses tailwindcss v4 for styling.
-- this project uses typescript for development.
-- this project uses prettier for code formatting.
-- this project uses vite.
-- this project uses pnpm package manager, not Bun or npm.
-- I should have a .prettierrc.json file in the root directory. please also follow rules on that.
+- `manager.cjs` runs with Bun or Node: `<runtime> manager.cjs <bun|npm|pnpm> <push|publish>`.
+- `push` merges local `dev` into `main` and pushes `main` and tags to `origin`.
+- `publish` additionally publishes an npm package; it does not submit an extension to browser stores. Private packages are rejected before Git changes.
+- Run these commands only when the user requests the corresponding push or publication.
 
-- entrypoints are in src/entrypoints directory
+## References
 
-## Storage
-
-- When we need storage we should use WXT Storage, you should import it from "#imports".
-- Please check project if I already defined a store
-- use "local:" prefix when storing data locally
-
-## Storage
-
-- When we need storage we should use WXT Storage, you should import it from "#imports".
-- Please check project if I already defined a store
-- use "local:" prefix when storing data locally
-
-```ts
-// utils/storage.ts
-import { storage } from "#imports"
-const showChangelogOnUpdate = storage.defineItem<boolean>("local:showChangelogOnUpdate", {
-  fallback: true,
-})
-
-// usage
-await showChangelogOnUpdate.getValue()
-await showChangelogOnUpdate.setValue(false)
-await showChangelogOnUpdate.removeValue()
-const unwatch = showChangelogOnUpdate.watch(newValue => {
-  // ...
-})
-```
-
-## i18n usage
-
-- when needed, use @wxt-dev/i18n, and import from "#i18n"
-- translations will be in <srcDir>/locales/ directory, and will be yml files.
-
-- usage example
-
-```ts
-import { i18n } from "#i18n"
-
-i18n.t("helloWorld") // "Hello world!"
-```
+- https://wxt.dev/guide/essentials/entrypoints
+- https://wxt.dev/guide/essentials/config/manifest
+- https://wxt.dev/guide/essentials/storage
