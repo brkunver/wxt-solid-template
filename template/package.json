@@ -10,12 +10,12 @@
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
     "zip": "wxt zip",
-    "zip:all": "pnpm run zip && pnpm run zip:firefox",
+    "zip:all": "bun run zip && pnpm run zip:firefox",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
     "postinstall": "wxt prepare",
-    "resize": "pnpm dlx @kunver/resize",
-    "manager": "node manager.cjs pnpm"
+    "resize": "bunx @kunver/resize",
+    "manager": "bun manager.cjs pnpm"
   },
   "dependencies": {
     "solid-js": "^1.9.11"
